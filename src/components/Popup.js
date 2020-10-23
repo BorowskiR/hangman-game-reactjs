@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { checkWin } from '../helpers/helpers';
 
-function Popup() {
+function Popup({ correctLetters, selectedWord, wrongLetters, setPlayable }) {
+  let finalMessage = '';
+  let finalMessageRevealWord = '';
+  let playable = true;
+
+  if (checkWin(correctLetters, wrongLetters, selectedWord) === 'win') {
+    finalMessage = 'Congratulation you win a bag of coins 🥇';
+    playable = false;
+  } else if (checkWin(correctLetters, wrongLetters, selectedWord) === 'lose') {
+    finalMessage = 'You lost :apple: ';
+    finalMessageRevealWord = `The word was ${selectedWord}`;
+    playable = false;
+  }
+
+  useEffect(() => setPlayable(playable));
+
   return (
-    <div class="popup-container" id="popup-container">
-      <div class="popup">
-        <h2></h2>
-        <h3></h3>
-        <button id="play-button">Play Again</button>
+    <div
+      className="popup-container"
+      style={finalMessage !== '' ? { display: 'flex' } : {}}
+    >
+      <div className="popup">
+        <h2>{finalMessage}</h2>
+        <h3>{finalMessageRevealWord}</h3>
+        <button>Play Again</button>
       </div>
     </div>
   );
